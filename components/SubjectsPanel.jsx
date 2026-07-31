@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import DocumentsPanel from './DocumentsPanel.jsx'
 
 function subtopicFraction(t) {
   return ((t.concept_done ? 1 : 0) + (t.pyqs_done ? 1 : 0) + (t.test_done ? 1 : 0)) / 3
@@ -106,6 +107,8 @@ export default function SubjectsPanel({ subjects, onAddSubject, onDeleteSubject,
                   <button className="ghost small danger" onClick={() => onDeleteSubject(s.id)}>
                     Delete subject
                   </button>
+
+                  <DocumentsPanel subjectId={s.id} title="Subject files" compact />
                 </div>
               )}
             </div>

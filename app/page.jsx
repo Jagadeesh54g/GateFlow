@@ -7,6 +7,8 @@ import TaskPlanner from '../components/TaskPlanner.jsx'
 import Timer from '../components/Timer.jsx'
 import StreakPanel from '../components/StreakPanel.jsx'
 import RevisionPlanner from '../components/RevisionPlanner.jsx'
+import DocumentsPanel from '../components/DocumentsPanel.jsx'
+import QuickLinks from '../components/QuickLinks.jsx'
 
 const DAILY_TARGET_MINUTES = 5 * 60 // default streak requirement: 5 hours/day
 const EXAM_DATE_KEY = 'gateflow_exam_date' // just a display setting, not prep data
@@ -17,7 +19,7 @@ export default function Page() {
   const [selectedDate, setSelectedDate] = useState(todayKey())
   const [sessionTotals, setSessionTotals] = useState({})
   const [revisions, setRevisions] = useState([])
-  const [examDate, setExamDate] = useState('2027-02-07')
+  const [examDate, setExamDate] = useState('2027-02-01')
   const [status, setStatus] = useState('loading') // loading | ready | error
   const [errorMsg, setErrorMsg] = useState('')
 
@@ -194,6 +196,10 @@ export default function Page() {
           onToggle={toggleRevision}
           onDelete={deleteRevision}
         />
+
+        <DocumentsPanel subjectId={null} title="Exam documents (syllabus, admit card, etc.)" />
+
+        <QuickLinks />
       </main>
 
       <footer className="footer">Synced to MongoDB via Next.js API routes.</footer>

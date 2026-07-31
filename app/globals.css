@@ -294,3 +294,83 @@ button.ghost.small.danger { color: #c0392b; border-color: #f0c4bc; margin-top: 8
   font-size: 11.5px;
   margin-top: 32px;
 }
+
+/* documents */
+.upload-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.upload-row input[type="file"] { font-size: 12px; }
+.small-hint { font-size: 11px; }
+.danger-text { color: #c0392b; }
+
+.documents-block { border-top: 1px solid var(--border); margin-top: 12px; padding-top: 12px; }
+.documents-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; font-size: 12.5px; }
+.documents-title { font-weight: 600; }
+
+.doc-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.doc-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fbfbfc;
+}
+.doc-open {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  padding: 2px 0;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  flex: 1;
+  min-width: 140px;
+  text-align: left;
+}
+.doc-icon { font-size: 15px; }
+.doc-name { word-break: break-word; }
+.doc-page {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10.5px;
+  color: var(--muted);
+}
+.doc-page input {
+  width: 48px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 3px 5px;
+  font-size: 12px;
+}
+.doc-notes {
+  flex-basis: 100%;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 12px;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 32px;
+}
+
+/* quick links */
+.quick-links { display: flex; flex-direction: column; gap: 8px; }
+.quick-link {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text);
+  transition: border-color .15s ease;
+}
+.quick-link:hover { border-color: var(--accent); }
+.quick-link-label { font-size: 13px; font-weight: 600; }
+.quick-link-sub { font-size: 11px; color: var(--muted); }
