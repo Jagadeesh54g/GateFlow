@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getDb } from '@/lib/mongodb'
 import { toObjectId } from '@/lib/serialize'
+import { requireUser } from '@/lib/session'
 
 export const dynamic = 'force-dynamic'
 
@@ -8,6 +9,7 @@ const ALLOWED = ['concept_done', 'pyqs_done', 'test_done', 'name']
 
 export async function PATCH(request, { params }) {
   try {
+    const user = await requireUser()
     const body = await request.json()
     const set = {}
     for (const key of ALLOWED) {
@@ -24,7 +26,7 @@ export async function PATCH(request, { params }) {
     const result = await db
       .collection('subjects')
       .findOneAndUpdate(
-        { _id: subjectId, 'subtopics._id': subtopicId },
+        { _id: subjectId, user_id: user.id, 'subtopics._id': subtopicId },
         { $set: set },
         { returnDocument: 'after' }
       )
@@ -42,12 +44,13 @@ export async function PATCH(request, { params }) {
 
 export async function DELETE(request, { params }) {
   try {
+    const user = await requireUser()
     const db = await getDb()
     const subjectId = toObjectId(params.id)
     const subtopicId = toObjectId(params.subtopicId)
     await db
       .collection('subjects')
-      .updateOne({ _id: subjectId }, { $pull: { subtopics: { _id: subtopicId } } })
+      .updateOne({ _id: subjectId, user_id: user.id }, { $pull: { subtopics: { _id: subtopicId } } })
     return new NextResponse(null, { status: 204 })
   } catch (err) {
     return NextResponse.json({ error: err.message }, { status: err.status || 500 })

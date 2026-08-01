@@ -1,24 +1,27 @@
 import { NextResponse } from 'next/server'
 import { getDb } from '@/lib/mongodb'
+import { requireUser } from '@/lib/session'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
   try {
+    const user = await requireUser()
     const db = await getDb()
-    const docs = await db.collection('study_sessions').find({}).toArray()
+    const docs = await db.collection('study_sessions').find({ user_id: user.id }).toArray()
     const totals = {}
     for (const row of docs) {
       totals[row.session_date] = (totals[row.session_date] || 0) + row.minutes
     }
     return NextResponse.json(totals) // { "2026-07-29": 185, ... }
   } catch (err) {
-    return NextResponse.json({ error: err.message }, { status: 500 })
+    return NextResponse.json({ error: err.message }, { status: err.status || 500 })
   }
 }
 
 export async function POST(request) {
   try {
+    const user = await requireUser()
     const body = await request.json()
     const { session_date, minutes } = body
     if (!session_date) return NextResponse.json({ error: 'session_date is required' }, { status: 400 })
@@ -26,12 +29,13 @@ export async function POST(request) {
 
     const db = await getDb()
     await db.collection('study_sessions').insertOne({
+      user_id: user.id,
       session_date,
       minutes,
       created_at: new Date().toISOString(),
     })
     return NextResponse.json({ ok: true }, { status: 201 })
   } catch (err) {
-    return NextResponse.json({ error: err.message }, { status: 500 })
+    return NextResponse.json({ error: err.message }, { status: err.status || 500 })
   }
 }

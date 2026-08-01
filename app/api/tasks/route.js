@@ -1,25 +1,28 @@
 import { NextResponse } from 'next/server'
 import { getDb } from '@/lib/mongodb'
 import { serializeDoc } from '@/lib/serialize'
+import { requireUser } from '@/lib/session'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET(request) {
   try {
+    const user = await requireUser()
     const { searchParams } = new URL(request.url)
     const date = searchParams.get('date')
 
     const db = await getDb()
-    const query = date ? { task_date: date } : {}
+    const query = date ? { user_id: user.id, task_date: date } : { user_id: user.id }
     const docs = await db.collection('tasks').find(query).sort({ created_at: 1 }).toArray()
     return NextResponse.json(docs.map(serializeDoc))
   } catch (err) {
-    return NextResponse.json({ error: err.message }, { status: 500 })
+    return NextResponse.json({ error: err.message }, { status: err.status || 500 })
   }
 }
 
 export async function POST(request) {
   try {
+    const user = await requireUser()
     const body = await request.json()
     const text = body.text?.trim()
     const task_date = body.task_date
@@ -28,6 +31,7 @@ export async function POST(request) {
 
     const db = await getDb()
     const doc = {
+      user_id: user.id,
       text,
       task_date,
       done: false,
@@ -38,6 +42,6 @@ export async function POST(request) {
     const result = await db.collection('tasks').insertOne(doc)
     return NextResponse.json(serializeDoc({ _id: result.insertedId, ...doc }), { status: 201 })
   } catch (err) {
-    return NextResponse.json({ error: err.message }, { status: 500 })
+    return NextResponse.json({ error: err.message }, { status: err.status || 500 })
   }
 }

@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
+import { useSession, signOut } from 'next-auth/react'
 import { api } from '@/lib/api.js'
 import { todayKey } from '../utils/date.js'
 import SubjectsPanel from '../components/SubjectsPanel.jsx'
@@ -14,6 +15,7 @@ const DAILY_TARGET_MINUTES = 5 * 60 // default streak requirement: 5 hours/day
 const EXAM_DATE_KEY = 'gateflow_exam_date' // just a display setting, not prep data
 
 export default function Page() {
+  const { data: session, status: authStatus } = useSession()
   const [subjects, setSubjects] = useState([])
   const [tasks, setTasks] = useState([])
   const [selectedDate, setSelectedDate] = useState(todayKey())
@@ -33,6 +35,7 @@ export default function Page() {
   }, [examDate])
 
   useEffect(() => {
+    if (authStatus !== 'authenticated') return
     let cancelled = false
     async function boot() {
       try {
@@ -55,7 +58,7 @@ export default function Page() {
     }
     boot()
     return () => { cancelled = true }
-  }, [])
+  }, [authStatus])
 
   useEffect(() => {
     if (status !== 'ready') return
@@ -132,7 +135,11 @@ export default function Page() {
 
   const todayMinutes = sessionTotals[todayKey()] || 0
   const remaining = daysUntilExam(examDate)
+  const displayName = session?.user?.name || session?.user?.email || ''
 
+  if (authStatus === 'loading' || authStatus === 'unauthenticated') {
+    return <div className="app centered">Loading…</div>
+  }
   if (status === 'loading') {
     return <div className="app centered">Loading your prep data…</div>
   }
@@ -154,14 +161,33 @@ export default function Page() {
   return (
     <div className="app">
       <header className="header">
-        <div>
-          <h1>GateFlow</h1>
-          <p className="muted">Plan. Study. Revise. Crack GATE.</p>
+        <div className="brand-row">
+          <span className="brand-mark">GF</span>
+          <div>
+            <h1>GateFlow</h1>
+            <p className="muted">Plan. Study. Revise. Crack GATE.</p>
+          </div>
         </div>
-        <div className="countdown">
-          <div className="countdown-num">{remaining}</div>
-          <div className="countdown-label">days left</div>
-          <input className="date-input" type="date" value={examDate} onChange={(e) => setExamDate(e.target.value)} />
+
+        <div className="header-right">
+          <div className="countdown">
+            <div className="countdown-num">{remaining}</div>
+            <div className="countdown-label">days left</div>
+            <input
+              className="date-input"
+              type="date"
+              value={examDate}
+              onChange={(e) => setExamDate(e.target.value)}
+            />
+          </div>
+
+          <div className="user-chip">
+            <span className="user-avatar">{displayName.slice(0, 1).toUpperCase() || '?'}</span>
+            <span className="user-name">{displayName}</span>
+            <button className="ghost small" onClick={() => signOut({ callbackUrl: '/login' })}>
+              Sign out
+            </button>
+          </div>
         </div>
       </header>
 

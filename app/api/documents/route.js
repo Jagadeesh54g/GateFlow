@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { put } from '@vercel/blob'
 import { getDb } from '@/lib/mongodb'
 import { serializeDoc } from '@/lib/serialize'
+import { requireUser } from '@/lib/session'
 
 export const dynamic = 'force-dynamic'
 
@@ -9,22 +10,29 @@ export const dynamic = 'force-dynamic'
 // GET /api/documents?scope=exam        -> exam-wide docs (no subject)
 export async function GET(request) {
   try {
+    const user = await requireUser()
     const { searchParams } = new URL(request.url)
     const subjectId = searchParams.get('subject_id')
     const scope = searchParams.get('scope')
 
     const db = await getDb()
-    const query = scope === 'exam' ? { subject_id: null } : subjectId ? { subject_id: subjectId } : {}
+    const query =
+      scope === 'exam'
+        ? { user_id: user.id, subject_id: null }
+        : subjectId
+        ? { user_id: user.id, subject_id: subjectId }
+        : { user_id: user.id }
     const docs = await db.collection('documents').find(query).sort({ created_at: -1 }).toArray()
     return NextResponse.json(docs.map(serializeDoc))
   } catch (err) {
-    return NextResponse.json({ error: err.message }, { status: 500 })
+    return NextResponse.json({ error: err.message }, { status: err.status || 500 })
   }
 }
 
 // POST /api/documents  (multipart/form-data: file, subject_id?)
 export async function POST(request) {
   try {
+    const user = await requireUser()
     const formData = await request.formData()
     const file = formData.get('file')
     const subjectId = formData.get('subject_id') || null
@@ -41,10 +49,12 @@ export async function POST(request) {
       )
     }
 
-    const blob = await put(file.name, file, { access: 'public', addRandomSuffix: true })
+    // namespace the blob path by user so two users' files never collide
+    const blob = await put(`${user.id}/${file.name}`, file, { access: 'public', addRandomSuffix: true })
 
     const db = await getDb()
     const doc = {
+      user_id: user.id,
       subject_id: subjectId,
       file_name: file.name,
       content_type: file.type || 'application/octet-stream',
@@ -58,6 +68,6 @@ export async function POST(request) {
     const result = await db.collection('documents').insertOne(doc)
     return NextResponse.json(serializeDoc({ _id: result.insertedId, ...doc }), { status: 201 })
   } catch (err) {
-    return NextResponse.json({ error: err.message }, { status: 500 })
+    return NextResponse.json({ error: err.message }, { status: err.status || 500 })
   }
 }
