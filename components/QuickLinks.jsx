@@ -7,9 +7,9 @@ const LINKS = [
     href: 'https://www.madeeasy.in/prep/mock-test-details/gate-2027-2026-computer-science-online-test-series',
   },
   {
-    label: 'MadeEasy — PYQ Practice',
+    label: 'practice paper-PYQ Practice',
     sub: 'GATE CS/IT previous year questions & solutions',
-    href: 'https://www.madeeasy.in/gate-exam-questions-answer-key-solutions',
+    href: 'https://practicepaper.in/gate-cse/topic-wise-practice-of-gate-cse-previous-year-papers',
     unverified: true,
   },
 ]
