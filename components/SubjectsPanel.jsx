@@ -12,9 +12,30 @@ function subjectProgress(subject) {
   return Math.round((sum / subject.subtopics.length) * 100)
 }
 
+const ICON_RULES = [
+  [/operating|\bos\b/i, '🖥️'],
+  [/network/i, '🌐'],
+  [/database|dbms/i, '🗄️'],
+  [/algorithm/i, '🧮'],
+  [/data ?struct/i, '🌳'],
+  [/theory of computation|\btoc\b/i, '🔤'],
+  [/compiler/i, '⚙️'],
+  [/discrete/i, '🔢'],
+  [/digital logic/i, '🔌'],
+  [/organi[sz]ation|\bcoa\b/i, '🖧'],
+  [/programming|\bc\b/i, '💻'],
+  [/math/i, '➗'],
+  [/aptitude|reasoning/i, '🧠'],
+]
+
+function iconForSubject(name = '') {
+  const match = ICON_RULES.find(([pattern]) => pattern.test(name))
+  return match ? match[1] : '📘'
+}
+
 export default function SubjectsPanel({ subjects, onAddSubject, onDeleteSubject, onAddSubtopic, onToggleStage, onDeleteSubtopic }) {
   const [newSubject, setNewSubject] = useState('')
-  const [openId, setOpenId] = useState(subjects[0]?.id ?? null)
+  const [openId, setOpenId] = useState(null)
   const [draftByTopic, setDraftByTopic] = useState('')
 
   function submitSubject(e) {
@@ -47,7 +68,11 @@ export default function SubjectsPanel({ subjects, onAddSubject, onDeleteSubject,
           return (
             <div key={s.id} className="subject-block">
               <button className="subject-summary" onClick={() => setOpenId(isOpen ? null : s.id)}>
-                <span className="subject-name">{s.name}</span>
+                <span className="subject-name">
+                  <span className="subject-icon" aria-hidden="true">{iconForSubject(s.name)}</span>
+                  {s.name}
+                  {pct === 100 && <span className="subject-done-badge" title="Fully mastered">✓</span>}
+                </span>
                 <span className="subject-meta">
                   <span className="mini-bar"><span style={{ width: `${pct}%` }} /></span>
                   <span className="muted">{pct}%</span>
@@ -101,7 +126,7 @@ export default function SubjectsPanel({ subjects, onAddSubject, onDeleteSubject,
                       onChange={(e) => setDraftByTopic(e.target.value)}
                       placeholder="Add a subtopic…"
                     />
-                    <button type="submit">Add</button>
+                    <button type="submit" className="btn-plus">Add</button>
                   </form>
 
                   <button className="ghost small danger" onClick={() => onDeleteSubject(s.id)}>
@@ -122,7 +147,7 @@ export default function SubjectsPanel({ subjects, onAddSubject, onDeleteSubject,
           onChange={(e) => setNewSubject(e.target.value)}
           placeholder="Add a subject…"
         />
-        <button type="submit">Add subject</button>
+        <button type="submit" className="btn-plus">Add subject</button>
       </form>
     </div>
   )

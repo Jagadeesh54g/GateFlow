@@ -36,6 +36,15 @@ function computeStreak(totals, targetMinutes) {
   return streak
 }
 
+function messageForStreak(streak) {
+  if (streak === 0) return "Every streak starts with day one — log today's session to begin."
+  if (streak < 3) return "Nice start — keep it going tomorrow."
+  if (streak < 7) return "You're building a real habit. Don't break the chain now."
+  if (streak < 14) return "A week strong. This is what discipline looks like."
+  if (streak < 30) return "Two weeks+ and counting — you're outworking most people."
+  return "A month+ streak. That's genuinely rare consistency."
+}
+
 export default function StreakPanel({ totals, dailyTargetMinutes }) {
   const days = lastNDays(84) // 12 weeks
   const streak = computeStreak(totals, dailyTargetMinutes)
@@ -45,7 +54,7 @@ export default function StreakPanel({ totals, dailyTargetMinutes }) {
     <div className="card">
       <div className="card-head">
         <h3>Consistency</h3>
-        <span className="pill">🔥 {streak} day streak</span>
+        <span className="pill pill-good">🔥 {streak} day streak</span>
       </div>
 
       <div className="heatmap">
@@ -58,10 +67,8 @@ export default function StreakPanel({ totals, dailyTargetMinutes }) {
         ))}
       </div>
 
-      <p className="hint">
-        {qualifyingDays} days you've hit the {dailyTargetMinutes / 60}h target. A day only counts toward your streak
-        once it reaches that.
-      </p>
+      <p className="streak-message">{messageForStreak(streak)}</p>
+      <p className="hint">{qualifyingDays} days you've hit the {dailyTargetMinutes / 60}h target.</p>
     </div>
   )
 }

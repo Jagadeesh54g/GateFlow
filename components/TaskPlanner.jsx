@@ -42,7 +42,7 @@ export default function TaskPlanner({ selectedDate, onDateChange, tasks, onAddTa
             <option key={s.id} value={s.id}>{s.name}</option>
           ))}
         </select>
-        <button type="submit">Add</button>
+        <button type="submit" className="btn-plus">Add</button>
       </form>
 
       <ul className="task-list">

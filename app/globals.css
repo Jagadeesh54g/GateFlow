@@ -26,8 +26,16 @@
 
 html, body {
   margin: 0;
-  background: var(--bg);
   color: var(--text);
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(rgba(247, 247, 251, 0.62), rgba(247, 247, 251, 0.62)),
+    url('/bg-motivation.svg');
+  background-repeat: no-repeat, no-repeat;
+  background-position: center, bottom center;
+  background-size: cover, cover;
+  background-attachment: fixed, fixed;
+  min-height: 100vh;
 }
 
 h1, h2, h3 { font-family: var(--font-display), var(--font-body), sans-serif; margin: 0; }
@@ -202,28 +210,51 @@ select {
 
 button {
   border: none;
-  background: var(--accent);
+  background: linear-gradient(135deg, var(--accent), #6f5ce8);
   color: #fff;
-  padding: 8px 14px;
+  padding: 9px 16px;
   border-radius: var(--radius-sm);
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   font-family: inherit;
-  transition: filter 0.15s ease, transform 0.05s ease;
+  box-shadow: 0 1px 2px rgba(91, 71, 224, 0.15), 0 4px 10px rgba(91, 71, 224, 0.18);
+  transition: filter 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
 }
-button:hover:not(:disabled) { filter: brightness(1.08); }
-button:active:not(:disabled) { transform: translateY(1px); }
-button:disabled { opacity: 0.4; cursor: not-allowed; }
+button:hover:not(:disabled) {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(91, 71, 224, 0.18), 0 6px 16px rgba(91, 71, 224, 0.24);
+}
+button:active:not(:disabled) { transform: translateY(0); box-shadow: 0 1px 2px rgba(91, 71, 224, 0.15); }
+button:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
 button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+button.btn-plus { display: inline-flex; align-items: center; gap: 6px; }
+button.btn-plus::before {
+  content: '+';
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  font-size: 13px;
+  line-height: 1;
+  font-weight: 700;
+}
 
 button.ghost {
   background: transparent;
   color: var(--muted);
   border: 1px solid var(--border);
+  box-shadow: none;
 }
+button.ghost:hover:not(:disabled) { box-shadow: none; background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
 button.ghost.small { padding: 4px 9px; font-size: 11px; }
 button.ghost.small.danger { color: var(--danger); border-color: #f3c9c4; margin-top: 8px; }
+button.ghost.small.danger:hover:not(:disabled) { background: var(--danger-soft); border-color: var(--danger); color: var(--danger); }
 
 /* tasks */
 .task-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
@@ -259,6 +290,27 @@ button.ghost.small.danger { color: var(--danger); border-color: #f3c9c4; margin-
   font-family: inherit;
 }
 .subject-meta { display: flex; align-items: center; gap: 8px; font-weight: 400; }
+.subject-name { display: flex; align-items: center; gap: 8px; }
+.subject-icon { font-size: 15px; line-height: 1; }
+.subject-done-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--good);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+}
+.streak-message {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--accent);
+  margin: 12px 0 4px;
+  line-height: 1.5;
+}
 .mini-bar { width: 70px; height: 6px; border-radius: 4px; background: var(--border); overflow: hidden; display: inline-block; }
 .mini-bar span { display: block; height: 100%; background: var(--accent); }
 .chevron { color: var(--muted); font-size: 11px; }
@@ -499,3 +551,25 @@ button.ghost.small.danger { color: var(--danger); border-color: #f3c9c4; margin-
 .small-hint { margin-top: 16px; text-align: center; font-size: 12.5px; }
 .auth-card a { color: var(--accent); font-weight: 600; text-decoration: none; }
 .auth-card a:hover { text-decoration: underline; }
+
+/* ---------- motivation banner ---------- */
+.motivation-banner {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  background: linear-gradient(120deg, var(--accent-soft) 0%, #fdf6ee 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+}
+.motivation-art { width: 64px; height: 42px; flex-shrink: 0; }
+.motivation-quote {
+  font-family: var(--font-display), sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+  line-height: 1.4;
+}

@@ -1,0 +1,78 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f3f1fc" />
+      <stop offset="45%" stop-color="#f7ecf5" />
+      <stop offset="75%" stop-color="#fde9d2" />
+      <stop offset="100%" stop-color="#fbd9a9" />
+    </linearGradient>
+
+    <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fff3c4" stop-opacity="0.95" />
+      <stop offset="45%" stop-color="#fbbf24" stop-opacity="0.55" />
+      <stop offset="100%" stop-color="#fbbf24" stop-opacity="0" />
+    </radialGradient>
+
+    <linearGradient id="peakBack" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e3ddfb" />
+      <stop offset="100%" stop-color="#cfc6f7" />
+    </linearGradient>
+    <linearGradient id="peakMid" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#b3a3f5" />
+      <stop offset="100%" stop-color="#8a7af0" />
+    </linearGradient>
+    <linearGradient id="peakFront" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6f5ce8" />
+      <stop offset="100%" stop-color="#4a3ac2" />
+    </linearGradient>
+
+    <linearGradient id="pathGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fff8ea" stop-opacity="0.95" />
+      <stop offset="100%" stop-color="#fff8ea" stop-opacity="0.55" />
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="0" width="1600" height="900" fill="url(#sky)" />
+
+  <!-- stars, fading toward the horizon -->
+  <g fill="#ffffff">
+    <circle cx="120" cy="90" r="2.2" opacity="0.8" />
+    <circle cx="260" cy="150" r="1.6" opacity="0.6" />
+    <circle cx="420" cy="70" r="2" opacity="0.7" />
+    <circle cx="610" cy="130" r="1.4" opacity="0.5" />
+    <circle cx="80" cy="220" r="1.6" opacity="0.55" />
+    <circle cx="340" cy="200" r="1.3" opacity="0.45" />
+    <circle cx="1500" cy="100" r="2" opacity="0.7" />
+    <circle cx="1400" cy="180" r="1.4" opacity="0.5" />
+    <circle cx="1250" cy="80" r="1.8" opacity="0.65" />
+  </g>
+
+  <!-- rising sun with soft glow -->
+  <circle cx="1180" cy="360" r="230" fill="url(#sunGlow)" />
+  <circle cx="1180" cy="360" r="70" fill="#fde8a8" />
+  <circle cx="1180" cy="360" r="70" fill="#fbbf24" opacity="0.55" />
+
+  <!-- back mountain layer -->
+  <path d="M0,560 L180,420 L340,510 L480,400 L620,540 L760,440 L900,560 L1600,480 L1600,900 L0,900 Z"
+        fill="url(#peakBack)" opacity="0.55" />
+
+  <!-- mid mountain layer -->
+  <path d="M0,650 L220,480 L400,600 L560,430 L740,600 L950,470 L1150,610 L1350,500 L1600,600 L1600,900 L0,900 Z"
+        fill="url(#peakMid)" opacity="0.7" />
+
+  <!-- front mountain layer (darkest, foreground) -->
+  <path d="M0,780 L160,660 L320,760 L520,600 L680,740 L880,620 L1080,760 L1280,650 L1460,760 L1600,700 L1600,900 L0,900 Z"
+        fill="url(#peakFront)" />
+
+  <!-- winding path climbing toward the sun, symbolizing the climb to exam day -->
+  <path d="M60,900 C 220,820 260,760 400,740 S 560,680 620,610 S 760,520 880,470 S 1040,400 1180,360"
+        fill="none" stroke="url(#pathGrad)" stroke-width="26" stroke-linecap="round" opacity="0.85" />
+  <path d="M60,900 C 220,820 260,760 400,740 S 560,680 620,610 S 760,520 880,470 S 1040,400 1180,360"
+        fill="none" stroke="#5b47e0" stroke-width="3" stroke-dasharray="14 16" stroke-linecap="round" opacity="0.35" />
+
+  <!-- small flag marking the summit / goal -->
+  <g transform="translate(1180,360)">
+    <line x1="0" y1="0" x2="0" y2="-46" stroke="#4a3ac2" stroke-width="4" stroke-linecap="round" />
+    <path d="M0,-46 L34,-36 L0,-26 Z" fill="#fbbf24" />
+  </g>
+</svg>

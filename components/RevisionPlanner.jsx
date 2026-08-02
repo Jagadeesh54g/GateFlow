@@ -41,7 +41,7 @@ export default function RevisionPlanner({ revisions, subjects, onAdd, onToggle, 
           ))}
         </select>
         <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
-        <button type="submit">Schedule</button>
+        <button type="submit" className="btn-plus">Schedule</button>
       </form>
 
       <ul className="revision-list">
